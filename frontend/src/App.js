@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {
@@ -21,8 +21,19 @@ import {
 } from "./routes/Routes.js";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import Store from "./redux/store";
+import { loadSeller, loadUser } from "./redux/actions/user";
+import { useSelector } from "react-redux";
+import ProtectedRoute from "./routes/ProtectedRoute";
+import ShopHomePage from "./ShopRoutes";
 const App = () => {
+
+
+  useEffect(() => {
+    Store.dispatch(loadUser());
+    Store.dispatch(loadSeller());
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>
@@ -42,9 +53,25 @@ const App = () => {
         <Route path="/best-selling" element={<BestSellingPage />} />
         <Route path="/events" element={<EventsPage />} />
         <Route path="/faq" element={<FAQPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        {/* shop routes */}
         <Route path="/create-shop" element={<ShopCreatePage />} />
         <Route path="/shop-login" element={<ShopLoginPage />} />
+        <Route
+          path="/shop/:id"
+          element={
+            <SellerProtectedRoute>
+              <ShopHomePage />
+            </SellerProtectedRoute>
+          }
+        />
         <Route
           path="/checkout"
           element={
