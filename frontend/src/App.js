@@ -16,8 +16,6 @@ import {
   SellerActivationPage,
   ShopLoginPage,
   CheckoutPage
-
-
 } from "./routes/Routes.js";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -25,10 +23,10 @@ import Store from "./redux/store";
 import { loadSeller, loadUser } from "./redux/actions/user";
 import { useSelector } from "react-redux";
 import ProtectedRoute from "./routes/ProtectedRoute";
-import ShopHomePage from "./ShopRoutes";
+import { ShopHomePage } from "./ShopRoutes";
+import SellerProtectedRoute from "./routes/SellerProtectedRoute";
+
 const App = () => {
-
-
   useEffect(() => {
     Store.dispatch(loadUser());
     Store.dispatch(loadSeller());
@@ -80,20 +78,19 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-
-        <ToastContainer
-          position="bottom-center"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="dark"
-        />
       </Routes>
+      <ToastContainer
+        position="bottom-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </BrowserRouter>
   );
 };
