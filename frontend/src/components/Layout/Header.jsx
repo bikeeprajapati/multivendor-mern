@@ -81,7 +81,7 @@ const Header = ({ activeHeading }) => {
                                 {searchData &&
                                     searchData.map((i, index) => {
                                         return (
-                                            <Link to={`/product/${i._id}`}>
+                                            <Link to={`/product/${i._id}`} key={index}>
                                                 <div className="w-full flex items-start-py-3">
                                                     <img
                                                         src={`${i.images[0]?.url}`}
@@ -115,26 +115,31 @@ const Header = ({ activeHeading }) => {
                     className={`${styles.section} relative ${styles.noramlFlex} justify-between`}
                 >
                     {/* categories */}
-                    <div onClick={() => setDropDown(!dropDown)}>
-                        <div className="relative h-[60px] mt-[10px] w-[270px] hidden 1000px:block">
-                            <BiMenuAltLeft size={30} className="absolute top-3 left-2" />
-                            <button
-                                className={`h-[100%] w-full flex justify-between items-center pl-10 bg-white font-sans text-lg font-[500] select-none rounded-t-md`}
-                            >
-                                All Categories
-                            </button>
-                            <IoIosArrowDown
-                                size={20}
-                                className="absolute right-2 top-4 cursor-pointer"
-                                onClick={() => setDropDown(!dropDown)}
-                            />
-                            {dropDown ? (
+                    <div className="relative h-[60px] mt-[10px] w-[270px] hidden 1000px:block">
+                        <BiMenuAltLeft size={30} className="absolute top-3 left-2" />
+                        <button
+                            onClick={() => setDropDown(!dropDown)}
+                            className={`h-[100%] w-full flex justify-between items-center pl-10 bg-white font-sans text-lg font-[500] select-none rounded-t-md`}
+                        >
+                            All Categories
+                        </button>
+                        <IoIosArrowDown
+                            size={20}
+                            className="absolute right-2 top-4 cursor-pointer"
+                            onClick={() => setDropDown(!dropDown)}
+                        />
+                        {dropDown ? (
+                            <>
+                                <div
+                                    className="fixed inset-0 z-[20]"
+                                    onClick={() => setDropDown(false)}
+                                ></div>
                                 <DropDown
                                     categoriesData={categoriesData}
                                     setDropDown={setDropDown}
                                 />
-                            ) : null}
-                        </div>
+                            </>
+                        ) : null}
                     </div>
                     {/* navitems */}
                     <div className={`${styles.noramlFlex}`}>
@@ -227,7 +232,7 @@ const Header = ({ activeHeading }) => {
                             onClick={() => setOpenCart(true)}
                         >
                             <AiOutlineShoppingCart size={30} />
-                            <span class="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px]  leading-tight text-center">
+                            <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px]  leading-tight text-center">
                                 {cart && cart.length}
                             </span>
                         </div>
@@ -252,7 +257,7 @@ const Header = ({ activeHeading }) => {
                                         onClick={() => setOpenWishlist(true) || setOpen(false)}
                                     >
                                         <AiOutlineHeart size={30} className="mt-5 ml-3" />
-                                        <span class="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px]  leading-tight text-center">
+                                        <span className="absolute right-0 top-0 rounded-full bg-[#3bc177] w-4 h-4 top right p-0 m-0 text-white font-mono text-[12px]  leading-tight text-center">
                                             {wishlist && wishlist.length}
                                         </span>
                                     </div>
@@ -274,12 +279,12 @@ const Header = ({ activeHeading }) => {
                                 />
                                 {searchData && (
                                     <div className="absolute bg-[#fff] z-10 shadow w-full left-0 p-3">
-                                        {searchData.map((i) => {
+                                        {searchData.map((i, index) => {
                                             const d = i.name;
 
                                             const Product_name = d.replace(/\s+/g, "-");
                                             return (
-                                                <Link to={`/product/${Product_name}`}>
+                                                <Link to={`/product/${Product_name}`} key={index}>
                                                     <div className="flex items-center">
                                                         <img
                                                             src={i.image_Url[0]?.url}

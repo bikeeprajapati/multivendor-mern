@@ -60,7 +60,7 @@ const App = () => {
           }
         />
         {/* shop routes */}
-        <Route path="/create-shop" element={<ShopCreatePage />} />
+        <Route path="/shop-create" element={<ShopCreatePage />} />
         <Route path="/shop-login" element={<ShopLoginPage />} />
         <Route
           path="/shop/:id"
