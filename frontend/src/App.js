@@ -17,6 +17,10 @@ import {
   ShopLoginPage,
   CheckoutPage
 } from "./routes/Routes.js";
+import {
+  ShopDashboardPage,
+  ShopCreateProduct,
+} from "./routes/ShopRoutes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Store from "./redux/store";
@@ -26,6 +30,7 @@ import { getAllEvents } from "./redux/actions/event";
 import { useSelector } from "react-redux";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import { ShopHomePage } from "./ShopRoutes";
+
 import SellerProtectedRoute from "./routes/SellerProtectedRoute";
 
 const App = () => {
@@ -80,6 +85,23 @@ const App = () => {
             <ProtectedRoute>
               <CheckoutPage />
             </ProtectedRoute>
+          }
+        />
+        {/* dashboard routes */}
+        <Route
+          path="/dashboard"
+          element={
+            <SellerProtectedRoute>
+              <ShopDashboardPage />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard-create-product"
+          element={
+            <SellerProtectedRoute>
+              <ShopCreateProduct />
+            </SellerProtectedRoute>
           }
         />
       </Routes>
