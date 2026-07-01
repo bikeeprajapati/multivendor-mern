@@ -334,7 +334,7 @@ router.put(
     })
 );
 
-// delete seller withdraw merthods --- only seller
+// delete seller withdraw methods --- only seller
 router.delete(
     "/delete-withdraw-method/",
     isSeller,
