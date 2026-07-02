@@ -18,11 +18,12 @@ const AllProducts = () => {
         dispatch(getAllProductsShop(seller._id));
     }, [dispatch]);
 
-    const handleDelete = (id) => {
-        dispatch(deleteProduct(id));
-        window.location.reload();
+    const handleDelete = async (id) => {
+        if (window.confirm("Are you sure you want to delete this product?")) {
+            await dispatch(deleteProduct(id));
+            dispatch(getAllProductsShop(seller._id));
+        }
     };
-
     const columns = [
         { field: "id", headerName: "Product Id", minWidth: 150, flex: 0.7 },
         {
