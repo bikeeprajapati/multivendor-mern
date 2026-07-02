@@ -19,7 +19,7 @@ import {
 } from "./routes/Routes.js";
 import {
   ShopDashboardPage,
-  ShopCreateProduct, ShopAllProducts, ShopCreateEvents,ShopAllEvents,
+  ShopCreateProduct, ShopAllProducts, ShopCreateEvents, ShopAllEvents,ShopAllCoupouns,
 } from "./routes/ShopRoutes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -125,6 +125,14 @@ const App = () => {
           element={
             <SellerProtectedRoute>
               <ShopAllEvents />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard-coupouns"
+          element={
+            <SellerProtectedRoute>
+              <ShopAllCoupouns />
             </SellerProtectedRoute>
           }
         />
