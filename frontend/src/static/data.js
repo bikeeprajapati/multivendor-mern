@@ -222,20 +222,20 @@ export const navItems = [
       title: "Shoes",
       subTitle: "",
       image_Url:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvBQPQMVNRd6TtDkGs2dCri0Y-rxKkFOiEWw&usqp=CAU",
+        "https://loremflickr.com/500/500/sneakers,shoes",
     },
     {
       id: 6,
       title: "Gifts",
       subTitle: "",
       image_Url:
-        "https://securecdn.pymnts.com/wp-content/uploads/2014/11/Gifts-Photo-700x489.jpg",
+        "https://loremflickr.com/500/500/giftbox,present",
     },
     {
       id: 7,
       title: "Pet Care",
       subTitle: "",
-      image_Url: "https://cdn.openpr.com/T/c/Tc15444071_g.jpg",
+      image_Url: "https://loremflickr.com/500/500/pet,dog",
     },
     {
       id: 8,
@@ -646,4 +646,3 @@ export const navItems = [
       name: "Live chat",
     },
   ];
-  
