@@ -1,6 +1,7 @@
 const path = require("path");
 require("dotenv").config({ path: path.resolve(__dirname, "../config/.env") });
 const mongoose = require("mongoose");
+const axios = require("axios");
 const Event = require("../model/event");
 const CoupounCode = require("../model/coupounCode");
 const Shop = require("../model/shop");
@@ -17,62 +18,59 @@ const run = async () => {
     }
     console.log(`Using shop: ${shop.name} (${shop._id})`);
 
-    const img = (label, color) =>
-        `https://placehold.co/500x500/${color}/ffffff?text=${encodeURIComponent(label)}`;
-
     // ---------- Events ----------
+    console.log("Fetching real product data from dummyjson.com for events...");
+    const { data } = await axios.get(
+        "https://dummyjson.com/products?limit=3&skip=20"
+    );
+
     const now = Date.now();
     const days = (n) => n * 24 * 60 * 60 * 1000;
 
-    const dummyEvents = [
+    const eventMeta = [
         {
-            name: "Summer Sale - Wireless Earbuds",
-            description: "Limited-time summer discount on our best-selling wireless earbuds.",
-            category: "Electronics",
-            tags: "audio,sale,summer",
-            originalPrice: 70,
-            discountPrice: 49,
-            stock: 20,
-            start_Date: new Date(now),
-            Finish_Date: new Date(now + days(7)),
-            images: [
-                { public_id: "dummy_event_earbuds_1", url: img("Earbuds+Sale", "b91c1c") },
-                { public_id: "dummy_event_earbuds_2", url: img("Earbuds+Sale+2", "991b1b") },
-            ],
+            label: "Summer Sale",
+            tags: "sale,summer",
+            start: now,
+            end: now + days(7),
         },
         {
-            name: "Flash Deal - Fitness Bundle",
-            description: "Yoga mat, water bottle, and resistance bands bundled at a flash-sale price.",
-            category: "Sports",
-            tags: "fitness,bundle,flashsale",
-            originalPrice: 90,
-            discountPrice: 60,
-            stock: 15,
-            start_Date: new Date(now + days(1)),
-            Finish_Date: new Date(now + days(5)),
-            images: [
-                { public_id: "dummy_event_fitness_1", url: img("Fitness+Bundle", "15803d") },
-            ],
+            label: "Flash Deal",
+            tags: "flashsale,limited",
+            start: now + days(1),
+            end: now + days(5),
         },
         {
-            name: "Back to School - Backpack Special",
-            description: "Discounted backpacks for the back-to-school season, while supplies last.",
-            category: "Bags",
-            tags: "backpack,school,sale",
-            originalPrice: 55,
-            discountPrice: 35,
-            stock: 25,
-            start_Date: new Date(now + days(2)),
-            Finish_Date: new Date(now + days(10)),
-            images: [
-                { public_id: "dummy_event_backpack_1", url: img("Backpack+Deal", "1d4ed8") },
-                { public_id: "dummy_event_backpack_2", url: img("Backpack+Deal+2", "1e40af") },
-            ],
+            label: "Weekend Special",
+            tags: "weekend,special",
+            start: now + days(2),
+            end: now + days(10),
         },
-    ].map((e) => ({ ...e, shopId: shop._id, shop: shop }));
+    ];
+
+    const dummyEvents = data.products.map((p, idx) => {
+        const meta = eventMeta[idx] || eventMeta[0];
+        return {
+            name: `${meta.label} - ${p.title}`,
+            description: p.description,
+            category: p.category,
+            tags: meta.tags,
+            originalPrice: Math.round(p.price * 1.3),
+            discountPrice: Math.round(p.price),
+            stock: p.stock,
+            start_Date: new Date(meta.start),
+            Finish_Date: new Date(meta.end),
+            images: p.images.slice(0, 3).map((url, i) => ({
+                public_id: `dummy_event_${p.id}_${i}`,
+                url,
+            })),
+            shopId: shop._id,
+            shop: shop,
+        };
+    });
 
     await Event.insertMany(dummyEvents);
-    console.log(`Inserted ${dummyEvents.length} dummy events`);
+    console.log(`Inserted ${dummyEvents.length} dummy events with real images`);
 
     // ---------- Coupons ----------
     // grab a couple of existing product names to attach to coupons (optional field)
