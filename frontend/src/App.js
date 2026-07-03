@@ -15,11 +15,13 @@ import {
   ShopCreatePage,
   SellerActivationPage,
   ShopLoginPage,
-  CheckoutPage
+  CheckoutPage,
+  PaymentPage,
+  OrderSuccessPage,
 } from "./routes/Routes.js";
 import {
   ShopDashboardPage,
-  ShopCreateProduct, ShopAllProducts, ShopCreateEvents, ShopAllEvents, ShopAllCoupouns,ShopPreviewPage,
+  ShopCreateProduct, ShopAllProducts, ShopCreateEvents, ShopAllEvents, ShopAllCoupouns, ShopPreviewPage,
 } from "./routes/ShopRoutes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -30,19 +32,44 @@ import { getAllEvents } from "./redux/actions/event";
 import { useSelector } from "react-redux";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import { ShopHomePage } from "./ShopRoutes";
-
 import SellerProtectedRoute from "./routes/SellerProtectedRoute";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import axios from "axios";
+import { server } from "./server";
 
 const App = () => {
+  const [stripeApikey, setStripeApiKey] = useState("");
+
+  async function getStripeApikey() {
+    const { data } = await axios.get(`${server}/payment/stripeapikey`);
+    setStripeApiKey(data.stripeApikey);
+  }
+
   useEffect(() => {
     Store.dispatch(loadUser());
     Store.dispatch(loadSeller());
     Store.dispatch(getAllProducts());
     Store.dispatch(getAllEvents());
+    getStripeApikey();
   }, []);
 
   return (
     <BrowserRouter>
+      {stripeApikey && (
+        <Elements stripe={loadStripe(stripeApikey)}>
+          <Routes>
+            <Route
+              path="/payment"
+              element={
+                <ProtectedRoute>
+                  <PaymentPage />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </Elements>
+      )}
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
@@ -68,6 +95,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        <Route path="/order/success" element={<OrderSuccessPage />} />
         <Route path="/shop/preview/:id" element={<ShopPreviewPage />} />
         {/* shop routes */}
         <Route path="/shop-create" element={<ShopCreatePage />} />
@@ -138,8 +166,6 @@ const App = () => {
           }
         />
       </Routes>
-
-
       <ToastContainer
         position="bottom-center"
         autoClose={5000}
