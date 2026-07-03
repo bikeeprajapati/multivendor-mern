@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "../../styles/styles";
-import { categoriesData, productData } from "../../static/data";
+import { categoriesData } from "../../static/data";
 import {
     AiOutlineHeart,
     AiOutlineSearch,
@@ -30,17 +30,32 @@ const Header = ({ activeHeading }) => {
     const [openCart, setOpenCart] = useState(false);
     const [openWishlist, setOpenWishlist] = useState(false);
     const [open, setOpen] = useState(false);
+    const navigate = useNavigate();
 
     const handleSearchChange = (e) => {
         const term = e.target.value;
         setSearchTerm(term);
 
+        if (term.trim() === "") {
+            setSearchData(null);
+            return;
+        }
+
         const filteredProducts =
             allProducts &&
-            allProducts.filter((product) =>
-                product.name.toLowerCase().includes(term.toLowerCase())
-            );
+            allProducts
+                .filter((product) =>
+                    product.name.toLowerCase().includes(term.toLowerCase())
+                )
+                .slice(0, 8);
         setSearchData(filteredProducts);
+    };
+
+    const handleSearchSubmit = (e) => {
+        if (e.key === "Enter" && searchTerm.trim() !== "") {
+            navigate(`/products?search=${encodeURIComponent(searchTerm.trim())}`);
+            setSearchData(null);
+        }
     };
 
     window.addEventListener("scroll", () => {
@@ -70,6 +85,7 @@ const Header = ({ activeHeading }) => {
                             placeholder="Search Product..."
                             value={searchTerm}
                             onChange={handleSearchChange}
+                            onKeyDown={handleSearchSubmit}
                             className="h-[40px] w-full px-2 border-[#3957db] border-[2px] rounded-md"
                         />
                         <AiOutlineSearch
@@ -276,26 +292,22 @@ const Header = ({ activeHeading }) => {
                                     className="h-[40px] w-full px-2 border-[#3957db] border-[2px] rounded-md"
                                     value={searchTerm}
                                     onChange={handleSearchChange}
+                                    onKeyDown={handleSearchSubmit}
                                 />
-                                {searchData && (
+                                {searchData && searchData.length !== 0 && (
                                     <div className="absolute bg-[#fff] z-10 shadow w-full left-0 p-3">
-                                        {searchData.map((i, index) => {
-                                            const d = i.name;
-
-                                            const Product_name = d.replace(/\s+/g, "-");
-                                            return (
-                                                <Link to={`/product/${Product_name}`} key={index}>
-                                                    <div className="flex items-center">
-                                                        <img
-                                                            src={i.image_Url[0]?.url}
-                                                            alt=""
-                                                            className="w-[50px] mr-2"
-                                                        />
-                                                        <h5>{i.name}</h5>
-                                                    </div>
-                                                </Link>
-                                            );
-                                        })}
+                                        {searchData.map((i) => (
+                                            <Link to={`/product/${i._id}`} key={i._id}>
+                                                <div className="flex items-center">
+                                                    <img
+                                                        src={i.images[0]?.url}
+                                                        alt=""
+                                                        className="w-[50px] mr-2"
+                                                    />
+                                                    <h5>{i.name}</h5>
+                                                </div>
+                                            </Link>
+                                        ))}
                                     </div>
                                 )}
                             </div>

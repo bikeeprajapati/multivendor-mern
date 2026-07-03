@@ -10,20 +10,34 @@ import styles from "../styles/styles";
 const ProductsPage = () => {
     const [searchParams] = useSearchParams();
     const categoryData = searchParams.get("category");
+    const searchQuery = searchParams.get("search");
     const { allProducts, isLoading } = useSelector((state) => state.products);
     const [data, setData] = useState([]);
 
     useEffect(() => {
-        if (categoryData === null) {
-            const d = allProducts;
+        if (!allProducts) {
+            setData([]);
+            return;
+        }
+
+        if (searchQuery) {
+            const term = searchQuery.toLowerCase();
+            const d = allProducts.filter(
+                (i) =>
+                    i.name?.toLowerCase().includes(term) ||
+                    i.category?.toLowerCase().includes(term) ||
+                    i.description?.toLowerCase().includes(term) ||
+                    i.tags?.toLowerCase().includes(term)
+            );
+            setData(d);
+        } else if (categoryData) {
+            const d = allProducts.filter((i) => i.category === categoryData);
             setData(d);
         } else {
-            const d =
-                allProducts && allProducts.filter((i) => i.category === categoryData);
-            setData(d);
+            setData(allProducts);
         }
         //    window.scrollTo(0,0);
-    }, [allProducts, categoryData]);
+    }, [allProducts, categoryData, searchQuery]);
 
     return (
         <>
@@ -37,7 +51,7 @@ const ProductsPage = () => {
                         <br />
                         <div className={`${styles.section}`}>
                             <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-4 lg:gap-[25px] xl:grid-cols-5 xl:gap-[30px] mb-12">
-                                {data && data.map((i, index) => <ProductCard data={i} key={index} />)}
+                                {data && data.map((i) => <ProductCard data={i} key={i._id} />)}
                             </div>
                             {data && data.length === 0 ? (
                                 <h1 className="text-center w-full pb-[100px] text-[20px]">
