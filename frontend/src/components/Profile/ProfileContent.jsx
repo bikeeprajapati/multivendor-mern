@@ -218,7 +218,7 @@ const AllOrders = () => {
             minWidth: 130,
             flex: 0.7,
             cellClassName: (params) => {
-                return params.getValue(params.id, "status") === "Delivered"
+                return params.row.status === "Delivered"
                     ? "greenColor"
                     : "redColor";
             },
@@ -306,7 +306,7 @@ const AllRefundOrders = () => {
             minWidth: 130,
             flex: 0.7,
             cellClassName: (params) => {
-                return params.getValue(params.id, "status") === "Delivered"
+                return params.row.status === "Delivered"
                     ? "greenColor"
                     : "redColor";
             },
@@ -391,7 +391,7 @@ const TrackOrder = () => {
             minWidth: 130,
             flex: 0.7,
             cellClassName: (params) => {
-                return params.getValue(params.id, "status") === "Delivered"
+                return params.row.status === "Delivered"
                     ? "greenColor"
                     : "redColor";
             },
