@@ -20,7 +20,7 @@ import {
   OrderSuccessPage,
 } from "./routes/Routes.js";
 import {
-  ShopDashboardPage,
+  ShopDashboardPage,ShopOrderDetails,
   ShopCreateProduct, ShopAllProducts, ShopCreateEvents, ShopAllEvents, ShopAllCoupouns, ShopPreviewPage,ShopAllOrders,
 } from "./routes/ShopRoutes";
 import { ToastContainer } from "react-toastify";
@@ -138,6 +138,14 @@ const App = () => {
           element={
             <SellerProtectedRoute>
               <ShopAllOrders />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/order/:id"
+          element={
+            <SellerProtectedRoute>
+              <ShopOrderDetails />
             </SellerProtectedRoute>
           }
         />
