@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "../styles/styles";
 import { getAllOrdersOfUser } from "../redux/actions/order";
+import { getAllProducts } from "../redux/actions/product";
 import { server } from "../server";
 import { RxCross1 } from "react-icons/rx";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
@@ -43,6 +44,7 @@ const UserOrderDetails = () => {
             .then((res) => {
                 toast.success(res.data.message);
                 dispatch(getAllOrdersOfUser(user._id));
+                dispatch(getAllProducts());
                 setComment("");
                 setRating(null);
                 setOpen(false);
