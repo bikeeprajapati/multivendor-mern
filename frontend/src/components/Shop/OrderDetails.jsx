@@ -19,7 +19,7 @@ const OrderDetails = () => {
 
     useEffect(() => {
         dispatch(getAllOrdersOfShop(seller._id));
-    }, [dispatch]);
+    }, [dispatch, seller._id]);
 
     const data = orders && orders.find((item) => item._id === id);
 
@@ -59,8 +59,16 @@ const OrderDetails = () => {
             });
     }
 
-    console.log(data?.status);
+    const statusOptions = [
+        "Processing",
+        "Transferred to delivery partner",
+        "Shipping",
+        "Received",
+        "On the way",
+        "Delivered",
+    ];
 
+    const refundStatusOptions = ["Processing refund", "Refund Success"];
 
     return (
         <div className={`py-4 min-h-screen ${styles.section}`}>
@@ -92,7 +100,7 @@ const OrderDetails = () => {
             <br />
             {data &&
                 data?.cart.map((item, index) => (
-                    <div className="w-full flex items-start mb-5">
+                    <div className="w-full flex items-start mb-5" key={item._id}>
                         <img
                             src={`${item.images[0]?.url}`}
                             alt=""
@@ -143,24 +151,8 @@ const OrderDetails = () => {
                     onChange={(e) => setStatus(e.target.value)}
                     className="w-[200px] mt-2 border h-[35px] rounded-[5px]"
                 >
-                    {[
-                        "Processing",
-                        "Transferred to delivery partner",
-                        "Shipping",
-                        "Received",
-                        "On the way",
-                        "Delivered",
-                    ]
-                        .slice(
-                            [
-                                "Processing",
-                                "Transferred to delivery partner",
-                                "Shipping",
-                                "Received",
-                                "On the way",
-                                "Delivered",
-                            ].indexOf(data?.status)
-                        )
+                    {statusOptions
+                        .slice(Math.max(statusOptions.indexOf(data?.status), 0))
                         .map((option, index) => (
                             <option value={option} key={index}>
                                 {option}
@@ -174,16 +166,8 @@ const OrderDetails = () => {
                         onChange={(e) => setStatus(e.target.value)}
                         className="w-[200px] mt-2 border h-[35px] rounded-[5px]"
                     >
-                        {[
-                            "Processing refund",
-                            "Refund Success",
-                        ]
-                            .slice(
-                                [
-                                    "Processing refund",
-                                    "Refund Success",
-                                ].indexOf(data?.status)
-                            )
+                        {refundStatusOptions
+                            .slice(Math.max(refundStatusOptions.indexOf(data?.status), 0))
                             .map((option, index) => (
                                 <option value={option} key={index}>
                                     {option}
