@@ -22,7 +22,7 @@ import {
   TrackOrderPage,
 } from "./routes/Routes.js";
 import {
-  ShopDashboardPage, ShopOrderDetails,ShopAllRefunds,ShopSettingsPage,
+  ShopDashboardPage, ShopOrderDetails, ShopAllRefunds, ShopSettingsPage,ShopWithDrawMoneyPage,
   ShopCreateProduct, ShopAllProducts, ShopCreateEvents, ShopAllEvents, ShopAllCoupouns, ShopPreviewPage, ShopAllOrders,
 } from "./routes/ShopRoutes";
 import { ToastContainer } from "react-toastify";
@@ -212,6 +212,14 @@ const App = () => {
           element={
             <SellerProtectedRoute>
               <ShopAllCoupouns />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard-withdraw-money"
+          element={
+            <SellerProtectedRoute>
+              <ShopWithDrawMoneyPage />
             </SellerProtectedRoute>
           }
         />
