@@ -19,9 +19,10 @@ import {
   PaymentPage,
   OrderSuccessPage,
   OrderDetailsPage,
+  TrackOrderPage,
 } from "./routes/Routes.js";
 import {
-  ShopDashboardPage, ShopOrderDetails,
+  ShopDashboardPage, ShopOrderDetails,ShopAllRefunds,
   ShopCreateProduct, ShopAllProducts, ShopCreateEvents, ShopAllEvents, ShopAllCoupouns, ShopPreviewPage, ShopAllOrders,
 } from "./routes/ShopRoutes";
 import { ToastContainer } from "react-toastify";
@@ -104,6 +105,14 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/user/track/order/:id"
+          element={
+            <ProtectedRoute>
+              <TrackOrderPage />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/order/success" element={<OrderSuccessPage />} />
         <Route path="/shop/preview/:id" element={<ShopPreviewPage />} />
         {/* shop routes */}
@@ -147,6 +156,14 @@ const App = () => {
           element={
             <SellerProtectedRoute>
               <ShopAllOrders />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard-refunds"
+          element={
+            <SellerProtectedRoute>
+              <ShopAllRefunds />
             </SellerProtectedRoute>
           }
         />
