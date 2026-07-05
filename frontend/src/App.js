@@ -22,7 +22,7 @@ import {
   TrackOrderPage,
 } from "./routes/Routes.js";
 import {
-  ShopDashboardPage, ShopOrderDetails,ShopAllRefunds,
+  ShopDashboardPage, ShopOrderDetails,ShopAllRefunds,ShopSettingsPage,
   ShopCreateProduct, ShopAllProducts, ShopCreateEvents, ShopAllEvents, ShopAllCoupouns, ShopPreviewPage, ShopAllOrders,
 } from "./routes/ShopRoutes";
 import { ToastContainer } from "react-toastify";
@@ -123,6 +123,14 @@ const App = () => {
           element={
             <SellerProtectedRoute>
               <ShopHomePage />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <SellerProtectedRoute>
+              <ShopSettingsPage />
             </SellerProtectedRoute>
           }
         />
