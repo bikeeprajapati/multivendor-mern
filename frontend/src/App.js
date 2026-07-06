@@ -22,7 +22,7 @@ import {
   TrackOrderPage,
 } from "./routes/Routes.js";
 import {
-  ShopDashboardPage, ShopOrderDetails, ShopAllRefunds, ShopSettingsPage,ShopWithDrawMoneyPage,
+  ShopDashboardPage, ShopOrderDetails, ShopAllRefunds, ShopSettingsPage, ShopWithDrawMoneyPage,ShopInboxPage,
   ShopCreateProduct, ShopAllProducts, ShopCreateEvents, ShopAllEvents, ShopAllCoupouns, ShopPreviewPage, ShopAllOrders,
 } from "./routes/ShopRoutes";
 import { ToastContainer } from "react-toastify";
@@ -220,6 +220,14 @@ const App = () => {
           element={
             <SellerProtectedRoute>
               <ShopWithDrawMoneyPage />
+            </SellerProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard-messages"
+          element={
+            <SellerProtectedRoute>
+              <ShopInboxPage />
             </SellerProtectedRoute>
           }
         />
