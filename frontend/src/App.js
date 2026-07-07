@@ -26,6 +26,7 @@ import {
   ShopDashboardPage, ShopOrderDetails, ShopAllRefunds, ShopSettingsPage, ShopWithDrawMoneyPage,ShopInboxPage,
   ShopCreateProduct, ShopAllProducts, ShopCreateEvents, ShopAllEvents, ShopAllCoupouns, ShopPreviewPage, ShopAllOrders,
 } from "./routes/ShopRoutes";
+import { AdminDashboardPage } from "./routes/AdminRoutes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Store from "./redux/store";
@@ -34,6 +35,7 @@ import { getAllProducts } from "./redux/actions/product";
 import { getAllEvents } from "./redux/actions/event";
 import { useSelector } from "react-redux";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import ProtectedAdminRoute from "./routes/ProtectedAdminRoute";
 import { ShopHomePage } from "./ShopRoutes";
 import SellerProtectedRoute from "./routes/SellerProtectedRoute";
 import { Elements } from "@stripe/react-stripe-js";
@@ -238,6 +240,15 @@ const App = () => {
             <SellerProtectedRoute>
               <ShopInboxPage />
             </SellerProtectedRoute>
+          }
+        />
+        {/* Admin Routes */}
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedAdminRoute>
+              <AdminDashboardPage />
+            </ProtectedAdminRoute>
           }
         />
 
