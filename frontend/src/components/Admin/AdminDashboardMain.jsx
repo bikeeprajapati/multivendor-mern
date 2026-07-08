@@ -19,7 +19,7 @@ const AdminDashboardMain = () => {
     useEffect(() => {
         dispatch(getAllOrdersOfAdmin());
         dispatch(getAllSellers());
-    }, []);
+    }, [dispatch]);
 
     const adminEarning = adminOrders && adminOrders.reduce((acc, item) => acc + item.totalPrice * .10, 0);
 
@@ -35,7 +35,7 @@ const AdminDashboardMain = () => {
             minWidth: 130,
             flex: 0.7,
             cellClassName: (params) => {
-                return params.getValue(params.id, "status") === "Delivered"
+                return params.row.status === "Delivered"
                     ? "greenColor"
                     : "redColor";
             },
