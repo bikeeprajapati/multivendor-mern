@@ -1,4 +1,6 @@
 const  app = require("./app");
+require("dns").setDefaultResultOrder("ipv4first");
+
 
 // handling Uncaught Exception
 process.on("uncaughtException", (err) => {
