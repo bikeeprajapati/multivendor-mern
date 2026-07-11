@@ -2,6 +2,14 @@
 
 A full-stack multivendor e-commerce marketplace built with the MERN stack. Supports three roles — buyers, sellers, and admins — with product and event listings, discount coupons, real-time chat, order lifecycle management, refunds, and Stripe/PayPal payments.
 
+## Live Demo
+
+- **Frontend:** [multivendor-mern-ashy.vercel.app](https://multivendor-mern-ashy.vercel.app)
+- **Backend API:** [multivendor-backend-219u.onrender.com](https://multivendor-backend-219u.onrender.com)
+- **Socket server:** [multivendor-socket-61tp.onrender.com](https://multivendor-socket-61tp.onrender.com)
+
+> **Note:** Backend and socket server run on Render's free tier, which spins down after 15 minutes of inactivity. The first request after idle time may take 30–60 seconds to respond while the service wakes up.
+
 ## Features
 
 **Buyer**
@@ -28,7 +36,7 @@ A full-stack multivendor e-commerce marketplace built with the MERN stack. Suppo
 
 **Frontend:** React 19, Redux Toolkit, React Router v7, Tailwind CSS, MUI (Data Grid), Socket.IO Client, Axios, React Toastify
 
-**Backend:** Node.js, Express 5, MongoDB with Mongoose 9, JWT authentication, bcryptjs, Cloudinary (image uploads), Nodemailer, Stripe & PayPal payments, Socket.IO
+**Backend:** Node.js, Express 5, MongoDB with Mongoose 9, JWT authentication, bcryptjs, Cloudinary (image uploads), Brevo (transactional email), Stripe & PayPal payments, Socket.IO
 
 ## Project Structure
 
@@ -59,7 +67,7 @@ multivendor-mern/
 - Cloudinary account (image hosting)
 - Stripe account (test mode keys are fine for development)
 - PayPal developer account
-- SMTP credentials for transactional email (e.g. Gmail app password)
+- Brevo account (transactional email — free tier, no card required)
 
 ### 1. Clone the repository
 ```bash
@@ -87,11 +95,8 @@ CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
 CLOUDINARY_API_KEY=your_cloudinary_api_key
 CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 
-SMPT_HOST=smtp.gmail.com
-SMPT_PORT=465
-SMPT_SERVICE=gmail
-SMPT_MAIL=your_email@gmail.com
-SMPT_PASSWORD=your_app_password
+BREVO_API_KEY=your_brevo_api_key
+BREVO_SENDER_EMAIL=your_verified_brevo_sender_email
 
 STRIPE_API_KEY=your_stripe_publishable_key
 STRIPE_SECRET_KEY=your_stripe_secret_key
@@ -144,12 +149,29 @@ All three (backend, frontend, socket server) need to be running simultaneously i
 | `npm start` | Start development server |
 | `npm run build` | Create a production build |
 
-## Deployment Notes
+## Deployment
 
-- Set `NODE_ENV=PRODUCTION` in the backend environment for production deployments
-- Update CORS `origin` in `backend/app.js` to include your deployed frontend URL
-- Update the `server` and socket `ENDPOINT` constants in the frontend to point at deployed backend/socket URLs
-- Never commit `.env` files — see `.gitignore`
+Deployed using the following setup:
+
+| Component | Platform |
+|---|---|
+| Frontend | Vercel |
+| Backend API | Render (Free tier) |
+| Socket server | Render (Free tier) |
+| Database | MongoDB Atlas |
+
+**Key deployment notes:**
+- Backend `NODE_ENV` set to `PRODUCTION`
+- Backend forces IPv4 DNS resolution (`dns.setDefaultResultOrder("ipv4first")` in `server.js`) — some hosting environments have unreliable outbound IPv6 routing, which can otherwise cause `ENETUNREACH` errors when connecting to third-party APIs (Cloudinary, etc.)
+- Transactional email uses Brevo's HTTP API rather than SMTP — Render's free tier blocks outbound SMTP ports (25/465/587) to prevent spam abuse, so a traditional Nodemailer/SMTP setup will silently time out on Render's free instances
+- CORS `origin` in `backend/app.js` explicitly allowlists the deployed frontend URL, and Socket.IO's own CORS config (separate from Express's `cors()` middleware) is also set on the socket server
+- Frontend `server`/`backend_url` constants point at the deployed backend URL with `/api/v2` appended for API calls
+- Vercel builds fail if `CI=true` (its default) treats ESLint warnings as build errors — set `CI=false` as an environment variable in the Vercel project settings if this occurs
+
+## Known Limitations
+
+- Render's free-tier services spin down after 15 minutes idle; the first request after inactivity is slow while the instance wakes up
+- Not all product categories (Gifts, Pet Care, Music and Gaming) have seeded demo data
 
 ## License
 
